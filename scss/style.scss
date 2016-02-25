@@ -1,0 +1,56 @@
+@font-face {
+  font-family: 'Roboto';
+  font-weight: 400;
+  src: url(../fonts/Roboto-Regular.ttf);
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-weight: 700;
+  src: url(../fonts/Roboto-Bold.ttf);
+}
+
+@mixin flexbox() {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+@mixin inline-flexbox() {
+  display: -webkit-inline-box;
+  display: -moz-inline-box;
+  display: -ms-inline-flexbox;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+}
+
+@mixin flex($values) {
+  -webkit-box-flex: $values;
+  -moz-box-flex:  $values;
+  -webkit-flex:  $values;
+  -ms-flex:  $values;
+  flex:  $values;
+}
+
+@mixin justify-content($value) {
+  -webkit-justify-content: $value;
+     -moz-justify-content: $value;
+      -ms-justify-content: $value;
+          justify-content: $value;
+}
+
+body, h1, h2, h3, h4, h5, p, ul, li, form{
+  margin: 0;
+  padding: 0;
+}
+ul, ol{
+  list-style: none;
+}
+
+canvas{
+  display: block;
+  margin: 0 auto;
+  background-color: #eee;
+}
