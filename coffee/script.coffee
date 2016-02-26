@@ -50,6 +50,7 @@ drawAlphabet = ->
 draw = ->
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   drawHiddenWord()
+  drawAlphabet()
 
 # Listen to key press
 document.addEventListener("click", (e)->
@@ -58,13 +59,15 @@ document.addEventListener("click", (e)->
     for i in [0..alpha.length]
       if i <= lettersInLine
         if pos[0] in [(startX + lineHeight * i + 7 - ballRadius)..(startX + lineHeight * i + 7 + ballRadius)] and pos[1] in [(startY - 7 - ballRadius)..(startY - 7 + ballRadius)]
+          if !(alpha[i] in clicked) and !(alpha[i] in myWord)
+            lives -= 1
           clicked.push(alpha[i])
       else
         if pos[0] in [(startX + lineHeight * (i - lettersInLine) + 7 - ballRadius)..(startX + lineHeight * (i - lettersInLine) + 7 + ballRadius)] and pos[1] in [(startY + 50 - 7 - ballRadius)..(startY + 50 - 7 + ballRadius)]
           clicked.push(alpha[i])
     console.log clicked
+    draw()
 , false)
 
 # setInterval(draw, 10)
-drawHiddenWord()
-drawAlphabet()
+draw()
