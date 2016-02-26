@@ -5,7 +5,7 @@ wordList = ["apple", "pear", "pineapple", "orange", "apricot", "peach", "raspber
 alpha = "abcdefghijklmnopqrstuvwxyz"
 startX = 20
 startY = 250
-myWord = "apple" # To do: add random choice
+myWord = wordList[Math.floor(Math.random()*wordList.length)]
 guessed = []
 clicked = []
 lives = 7
@@ -19,6 +19,7 @@ canvasTopEdge = rect.top
 ballRadius = 17
 lineHeight = 35
 lettersInLine = 13
+step = 25
 
 drawHiddenWord = ->
   for i in [1..myWord.length]
@@ -51,6 +52,17 @@ draw = ->
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   drawHiddenWord()
   drawAlphabet()
+  copyWord = myWord
+  for i in [1...myWord.length+1]
+    if myWord[i-1] in guessed
+      console.log "You guessed"
+      ctx.fillText(myWord[i-1], step*2*(copyWord.indexOf(copyWord[i-1])+1), 85)
+      copyWord = copyWord.replace(myWord[i-1], "0")
+  console.log guessed
+
+count = (string, char) ->
+  re = new RegExp(char, "gi")
+  return string.match(re).length
 
 # Listen to key press
 document.addEventListener("click", (e)->
@@ -61,13 +73,19 @@ document.addEventListener("click", (e)->
         if pos[0] in [(startX + lineHeight * i + 7 - ballRadius)..(startX + lineHeight * i + 7 + ballRadius)] and pos[1] in [(startY - 7 - ballRadius)..(startY - 7 + ballRadius)]
           if !(alpha[i] in clicked) and !(alpha[i] in myWord)
             lives -= 1
+          else if !(alpha[i] in clicked) and (alpha[i] in myWord)
+            for r in [0...count(myWord, alpha[i])]
+              guessed.push(alpha[i])
           clicked.push(alpha[i])
       else
         if pos[0] in [(startX + lineHeight * (i - lettersInLine) + 7 - ballRadius)..(startX + lineHeight * (i - lettersInLine) + 7 + ballRadius)] and pos[1] in [(startY + 50 - 7 - ballRadius)..(startY + 50 - 7 + ballRadius)]
+          if !(alpha[i] in clicked) and !(alpha[i] in myWord)
+            lives -= 1
+          else if !(alpha[i] in clicked) and (alpha[i] in myWord)
+            for r in [0...count(myWord, alpha[i])]
+              guessed.push(alpha[i])
           clicked.push(alpha[i])
-    console.log clicked
-    draw()
+  draw()
 , false)
 
-# setInterval(draw, 10)
 draw()
