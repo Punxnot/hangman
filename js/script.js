@@ -1,5 +1,5 @@
 (function() {
-  var alpha, ballRadius, canvas, canvasBottomEdge, canvasLeftEdge, canvasRightEdge, canvasTopEdge, clicked, count, ctx, draw, drawAlphabet, drawHiddenWord, guessed, lettersInLine, lineHeight, lineStart, lives, message, myWord, rect, startX, startY, step, wordList,
+  var alpha, ballRadius, canvas, canvasBottomEdge, canvasLeftEdge, canvasRightEdge, canvasTopEdge, clicked, count, ctx, draw, drawAlphabet, drawHiddenWord, drawLetters, fillColor, guessed, lettersInLine, lineHeight, lineStart, lives, message, myWord, rect, startX, startY, step, textColor, wordList,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   canvas = document.getElementById('gameCanvas');
@@ -46,6 +46,10 @@
 
   step = 25;
 
+  textColor = "black";
+
+  fillColor = "silver";
+
   drawHiddenWord = function() {
     var i, j, ref, results;
     results = [];
@@ -66,14 +70,14 @@
       letter = alpha[j];
       ctx.beginPath();
       ctx.arc(x + 7, y - 7, ballRadius, 0, Math.PI * 2);
-      ctx.fillStyle = "black";
+      ctx.fillStyle = textColor;
       ctx.stroke();
-      ctx.closePath();
       ctx.fillText(letter, x, y);
+      ctx.closePath();
       if (indexOf.call(clicked, letter) >= 0) {
         ctx.beginPath();
         ctx.arc(x + 7, y - 7, ballRadius, 0, Math.PI * 2);
-        ctx.fillStyle = "silver";
+        ctx.fillStyle = fillColor;
         ctx.fill();
         ctx.closePath();
       }
@@ -88,15 +92,13 @@
     return results;
   };
 
-  draw = function() {
+  drawLetters = function() {
     var copyWord, i, j, ref, ref1, results;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawHiddenWord();
-    drawAlphabet();
     copyWord = myWord;
     results = [];
     for (i = j = 1, ref = myWord.length + 1; 1 <= ref ? j < ref : j > ref; i = 1 <= ref ? ++j : --j) {
       if (ref1 = myWord[i - 1], indexOf.call(guessed, ref1) >= 0) {
+        ctx.fillStyle = textColor;
         ctx.fillText(myWord[i - 1], step * 2 * (copyWord.indexOf(copyWord[i - 1]) + 1), 85);
         results.push(copyWord = copyWord.replace(myWord[i - 1], "0"));
       } else {
@@ -104,6 +106,13 @@
       }
     }
     return results;
+  };
+
+  draw = function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawHiddenWord();
+    drawAlphabet();
+    return drawLetters();
   };
 
   count = function(string, char) {
