@@ -55,10 +55,8 @@ draw = ->
   copyWord = myWord
   for i in [1...myWord.length+1]
     if myWord[i-1] in guessed
-      console.log "You guessed"
       ctx.fillText(myWord[i-1], step*2*(copyWord.indexOf(copyWord[i-1])+1), 85)
       copyWord = copyWord.replace(myWord[i-1], "0")
-  console.log guessed
 
 count = (string, char) ->
   re = new RegExp(char, "gi")
@@ -69,8 +67,9 @@ document.addEventListener("click", (e)->
   pos = [e.clientX-canvasLeftEdge, e.clientY-canvasTopEdge]
   if lives > 0 and message != "YOU WIN!"
     for i in [0..alpha.length]
-      if i <= lettersInLine
+      if i < lettersInLine
         if pos[0] in [(startX + lineHeight * i + 7 - ballRadius)..(startX + lineHeight * i + 7 + ballRadius)] and pos[1] in [(startY - 7 - ballRadius)..(startY - 7 + ballRadius)]
+          console.log alpha[i]
           if !(alpha[i] in clicked) and !(alpha[i] in myWord)
             lives -= 1
           else if !(alpha[i] in clicked) and (alpha[i] in myWord)
@@ -79,6 +78,7 @@ document.addEventListener("click", (e)->
           clicked.push(alpha[i])
       else
         if pos[0] in [(startX + lineHeight * (i - lettersInLine) + 7 - ballRadius)..(startX + lineHeight * (i - lettersInLine) + 7 + ballRadius)] and pos[1] in [(startY + 50 - 7 - ballRadius)..(startY + 50 - 7 + ballRadius)]
+          console.log alpha[i]
           if !(alpha[i] in clicked) and !(alpha[i] in myWord)
             lives -= 1
           else if !(alpha[i] in clicked) and (alpha[i] in myWord)

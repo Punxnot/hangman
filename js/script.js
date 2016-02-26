@@ -89,19 +89,21 @@
   };
 
   draw = function() {
-    var copyWord, i, j, ref, ref1;
+    var copyWord, i, j, ref, ref1, results;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawHiddenWord();
     drawAlphabet();
     copyWord = myWord;
+    results = [];
     for (i = j = 1, ref = myWord.length + 1; 1 <= ref ? j < ref : j > ref; i = 1 <= ref ? ++j : --j) {
       if (ref1 = myWord[i - 1], indexOf.call(guessed, ref1) >= 0) {
-        console.log("You guessed");
         ctx.fillText(myWord[i - 1], step * 2 * (copyWord.indexOf(copyWord[i - 1]) + 1), 85);
-        copyWord = copyWord.replace(myWord[i - 1], "0");
+        results.push(copyWord = copyWord.replace(myWord[i - 1], "0"));
+      } else {
+        results.push(void 0);
       }
     }
-    return console.log(guessed);
+    return results;
   };
 
   count = function(string, char) {
@@ -115,7 +117,7 @@
     pos = [e.clientX - canvasLeftEdge, e.clientY - canvasTopEdge];
     if (lives > 0 && message !== "YOU WIN!") {
       for (i = j = 0, ref = alpha.length; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
-        if (i <= lettersInLine) {
+        if (i < lettersInLine) {
           if ((ref1 = pos[0], indexOf.call((function() {
             results = [];
             for (var k = ref2 = startX + lineHeight * i + 7 - ballRadius, ref3 = startX + lineHeight * i + 7 + ballRadius; ref2 <= ref3 ? k <= ref3 : k >= ref3; ref2 <= ref3 ? k++ : k--){ results.push(k); }
@@ -125,6 +127,7 @@
             for (var l = ref5 = startY - 7 - ballRadius, ref6 = startY - 7 + ballRadius; ref5 <= ref6 ? l <= ref6 : l >= ref6; ref5 <= ref6 ? l++ : l--){ results1.push(l); }
             return results1;
           }).apply(this), ref4) >= 0)) {
+            console.log(alpha[i]);
             if (!(ref7 = alpha[i], indexOf.call(clicked, ref7) >= 0) && !(ref8 = alpha[i], indexOf.call(myWord, ref8) >= 0)) {
               lives -= 1;
             } else if (!(ref9 = alpha[i], indexOf.call(clicked, ref9) >= 0) && (ref10 = alpha[i], indexOf.call(myWord, ref10) >= 0)) {
@@ -144,6 +147,7 @@
             for (var o = ref16 = startY + 50 - 7 - ballRadius, ref17 = startY + 50 - 7 + ballRadius; ref16 <= ref17 ? o <= ref17 : o >= ref17; ref16 <= ref17 ? o++ : o--){ results3.push(o); }
             return results3;
           }).apply(this), ref15) >= 0)) {
+            console.log(alpha[i]);
             if (!(ref18 = alpha[i], indexOf.call(clicked, ref18) >= 0) && !(ref19 = alpha[i], indexOf.call(myWord, ref19) >= 0)) {
               lives -= 1;
             } else if (!(ref20 = alpha[i], indexOf.call(clicked, ref20) >= 0) && (ref21 = alpha[i], indexOf.call(myWord, ref21) >= 0)) {
