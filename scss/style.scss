@@ -67,8 +67,15 @@ canvas{
   border: 1px solid #eee;
   border-radius: 50%;
   cursor: pointer;
+  &:hover{
+    border-color: #49ade9;
+  }
   &.disabled{
     color: grey;
     background: #eee;
+    &:hover{
+      border-color: #eee;
+      cursor: default;
+    }
   }
 }

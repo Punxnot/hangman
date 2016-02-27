@@ -80,7 +80,14 @@ canvas {
   border-radius: 50%;
   cursor: pointer;
 }
+.letter:hover {
+  border-color: #49ade9;
+}
 .letter.disabled {
   color: grey;
   background: #eee;
+}
+.letter.disabled:hover {
+  border-color: #eee;
+  cursor: default;
 }

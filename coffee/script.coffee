@@ -71,7 +71,7 @@ drawHangman = (counter) ->
     ctx.stroke()
   else if counter == 0
     ctx.beginPath()
-    ctx.strokeStyle = "red"
+    ctx.strokeStyle = "#dc4949"
     ctx.lineWidth = 4
     ctx.moveTo(500, 20)
     ctx.lineTo(500, 50)
@@ -149,6 +149,8 @@ document.addEventListener("click", (e)->
 
 initialState = ->
   clearCanvas()
+  ctx.strokeStyle = "black"
+  ctx.lineWidth = 1
   myWord = wordList[Math.floor(Math.random()*wordList.length)]
   guessed = []
   clicked = []
@@ -159,6 +161,9 @@ initialState = ->
   for letter in disabledLetters
     letter.classList.remove("disabled")
   drawHiddenWord()
+  drawHangman(lives)
+  drawMessage()
+  drawLives()
 
 window.onload = ->
   drawAlphabet()

@@ -91,7 +91,7 @@
       return ctx.stroke();
     } else if (counter === 0) {
       ctx.beginPath();
-      ctx.strokeStyle = "red";
+      ctx.strokeStyle = "#dc4949";
       ctx.lineWidth = 4;
       ctx.moveTo(500, 20);
       ctx.lineTo(500, 50);
@@ -198,6 +198,8 @@
   initialState = function() {
     var disabledLetters, j, len, letter;
     clearCanvas();
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
     myWord = wordList[Math.floor(Math.random() * wordList.length)];
     guessed = [];
     clicked = [];
@@ -209,7 +211,10 @@
       letter = disabledLetters[j];
       letter.classList.remove("disabled");
     }
-    return drawHiddenWord();
+    drawHiddenWord();
+    drawHangman(lives);
+    drawMessage();
+    return drawLives();
   };
 
   window.onload = function() {
