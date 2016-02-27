@@ -1,13 +1,13 @@
 canvas = document.getElementById('gameCanvas')
 ctx = canvas.getContext("2d")
 ctx.font = "30px Arial"
-wordList = ["apple", "pear", "pineapple", "go"]
+wordList = ["sad", "surprised", "upset"]
 alpha = "abcdefghijklmnopqrstuvwxyz"
 myWord = wordList[Math.floor(Math.random()*wordList.length)]
 guessed = []
 clicked = []
 lives = 7
-message = "Guess word"
+message = "Guess emotion"
 lineStart = 50
 step = 25
 textColor = "black"
@@ -15,6 +15,13 @@ fillColor = "silver"
 messageColor = "#49ade9"
 messageContainer = document.getElementById("message")
 livesContainer = document.getElementById("lives")
+imageContainer = document.getElementById("imgContainer")
+
+showImage = ->
+  imagePath = "img/#{myWord}.jpg"
+  image = document.createElement("img")
+  image.setAttribute("src", imagePath)
+  imageContainer.appendChild(image)
 
 drawHangman = (counter) ->
   if counter == 7
@@ -155,7 +162,7 @@ initialState = ->
   guessed = []
   clicked = []
   lives = 7
-  message = "Guess word"
+  message = "Guess emotion"
   messageColor = "#49ade9"
   disabledLetters = document.querySelectorAll(".letter.disabled")
   for letter in disabledLetters
@@ -164,9 +171,12 @@ initialState = ->
   drawHangman(lives)
   drawMessage()
   drawLives()
+  imageContainer.innerHTML = ""
+  showImage()
 
 window.onload = ->
   drawAlphabet()
   draw()
   drawHiddenWord()
   drawHangman(lives)
+  showImage()

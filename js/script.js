@@ -1,5 +1,5 @@
 (function() {
-  var alpha, canvas, clearCanvas, clicked, count, ctx, draw, drawAlphabet, drawHangman, drawHiddenWord, drawLetters, drawLives, drawMessage, fillColor, guessed, initialState, lineStart, lives, livesContainer, message, messageColor, messageContainer, myWord, step, textColor, wordList,
+  var alpha, canvas, clearCanvas, clicked, count, ctx, draw, drawAlphabet, drawHangman, drawHiddenWord, drawLetters, drawLives, drawMessage, fillColor, guessed, imageContainer, initialState, lineStart, lives, livesContainer, message, messageColor, messageContainer, myWord, showImage, step, textColor, wordList,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   canvas = document.getElementById('gameCanvas');
@@ -8,7 +8,7 @@
 
   ctx.font = "30px Arial";
 
-  wordList = ["apple", "pear", "pineapple", "go"];
+  wordList = ["sad", "surprised", "upset"];
 
   alpha = "abcdefghijklmnopqrstuvwxyz";
 
@@ -20,7 +20,7 @@
 
   lives = 7;
 
-  message = "Guess word";
+  message = "Guess emotion";
 
   lineStart = 50;
 
@@ -35,6 +35,16 @@
   messageContainer = document.getElementById("message");
 
   livesContainer = document.getElementById("lives");
+
+  imageContainer = document.getElementById("imgContainer");
+
+  showImage = function() {
+    var image, imagePath;
+    imagePath = "img/" + myWord + ".jpg";
+    image = document.createElement("img");
+    image.setAttribute("src", imagePath);
+    return imageContainer.appendChild(image);
+  };
 
   drawHangman = function(counter) {
     if (counter === 7) {
@@ -204,7 +214,7 @@
     guessed = [];
     clicked = [];
     lives = 7;
-    message = "Guess word";
+    message = "Guess emotion";
     messageColor = "#49ade9";
     disabledLetters = document.querySelectorAll(".letter.disabled");
     for (j = 0, len = disabledLetters.length; j < len; j++) {
@@ -214,14 +224,17 @@
     drawHiddenWord();
     drawHangman(lives);
     drawMessage();
-    return drawLives();
+    drawLives();
+    imageContainer.innerHTML = "";
+    return showImage();
   };
 
   window.onload = function() {
     drawAlphabet();
     draw();
     drawHiddenWord();
-    return drawHangman(lives);
+    drawHangman(lives);
+    return showImage();
   };
 
 }).call(this);
