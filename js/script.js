@@ -37,28 +37,46 @@
   livesContainer = document.getElementById("lives");
 
   drawHangman = function(counter) {
-    if (counter === 6) {
+    if (counter === 7) {
       ctx.beginPath();
+      ctx.moveTo(595, 0);
+      ctx.lineTo(595, canvas.height);
+      ctx.lineWidth = 10;
+      ctx.strokeStyle = "black";
+      ctx.stroke();
+      ctx.moveTo(530, canvas.height - 5);
+      ctx.lineTo(595, canvas.height - 5);
+      ctx.stroke();
+      ctx.moveTo(500, 5);
+      ctx.lineTo(595, 5);
+      ctx.stroke();
+      ctx.moveTo(500, 0);
+      ctx.lineTo(500, 20);
+      ctx.stroke();
+      ctx.moveTo(565, 0);
+      ctx.lineTo(595, 30);
+      ctx.lineWidth = 5;
+      return ctx.stroke();
+    } else if (counter === 6) {
+      ctx.beginPath();
+      ctx.lineWidth = 1;
       ctx.fillStyle = "black";
-      ctx.arc(500, 50, 30, 0, Math.PI * 2, true);
+      ctx.arc(500, 80, 30, 0, Math.PI * 2, true);
       return ctx.stroke();
     } else if (counter === 5) {
       ctx.beginPath();
-      ctx.moveTo(500, 80);
+      ctx.moveTo(500, 110);
       ctx.lineTo(500, 180);
-      ctx.strokeStyle = "black";
       return ctx.stroke();
     } else if (counter === 4) {
       ctx.beginPath();
-      ctx.strokeStyle = "#0000";
-      ctx.moveTo(500, 80);
-      ctx.lineTo(450, 130);
+      ctx.moveTo(500, 110);
+      ctx.lineTo(450, 160);
       return ctx.stroke();
     } else if (counter === 3) {
       ctx.beginPath();
-      ctx.strokeStyle = "#0000";
-      ctx.moveTo(500, 80);
-      ctx.lineTo(550, 130);
+      ctx.moveTo(500, 110);
+      ctx.lineTo(550, 160);
       return ctx.stroke();
     } else if (counter === 2) {
       ctx.beginPath();
@@ -68,9 +86,15 @@
       return ctx.stroke();
     } else if (counter === 1) {
       ctx.beginPath();
-      ctx.strokeStyle = "black";
       ctx.moveTo(500, 180);
       ctx.lineTo(550, 280);
+      return ctx.stroke();
+    } else if (counter === 0) {
+      ctx.beginPath();
+      ctx.strokeStyle = "red";
+      ctx.lineWidth = 4;
+      ctx.moveTo(500, 20);
+      ctx.lineTo(500, 50);
       return ctx.stroke();
     }
   };
@@ -191,7 +215,8 @@
   window.onload = function() {
     drawAlphabet();
     draw();
-    return drawHiddenWord();
+    drawHiddenWord();
+    return drawHangman(lives);
   };
 
 }).call(this);
