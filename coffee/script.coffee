@@ -1,7 +1,7 @@
 canvas = document.getElementById('gameCanvas')
 ctx = canvas.getContext("2d")
 ctx.font = "30px Arial"
-wordList = ["apple", "pear", "pineapple", "orange", "apricot", "peach", "raspberry", "strawberry"]
+wordList = ["apple", "pear", "pineapple", "go"]
 alpha = "abcdefghijklmnopqrstuvwxyz"
 myWord = wordList[Math.floor(Math.random()*wordList.length)]
 guessed = []
@@ -9,8 +9,6 @@ clicked = []
 lives = 7
 message = "Guess word"
 lineStart = 50
-# rect = canvas.getBoundingClientRect()
-# canvasTopEdge = rect.top
 step = 25
 textColor = "black"
 fillColor = "silver"
@@ -29,10 +27,12 @@ drawAlphabet = ->
     letterContainer.appendChild(span)
 
 drawHiddenWord = ->
+  ctx.beginPath()
   for i in [1..myWord.length]
     ctx.moveTo(lineStart*i, 100)
     ctx.lineTo(lineStart*i+20, 100)
     ctx.stroke()
+  ctx.closePath()
 
 drawLetters = ->
   copyWord = myWord
@@ -52,13 +52,11 @@ drawLives = ->
 
 draw = ->
   console.log "Draw"
-  drawHiddenWord()
   drawLetters()
   drawMessage()
   drawLives()
 
 clearCanvas = ->
-  console.log "Clear"
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 
 # Helper method to count letter occurrences in string
@@ -68,6 +66,7 @@ count = (string, char) ->
 
 # Listen to click
 document.addEventListener("click", (e)->
+  console.log e.target
   if e.target.classList.contains("letter") and message != "You win" and message != "You lose"
     clickedLetter = e.target.id
     if !(clickedLetter in clicked) and !(clickedLetter in myWord)
@@ -84,10 +83,24 @@ document.addEventListener("click", (e)->
     clicked.push(clickedLetter)
     e.target.classList.add("disabled")
     draw()
-  else if e.target.id = "playAgain"
-    clearCanvas()
+  else if e.target.classList.contains("play-button")
+    initialState()
 , false)
+
+initialState = ->
+  clearCanvas()
+  myWord = wordList[Math.floor(Math.random()*wordList.length)]
+  guessed = []
+  clicked = []
+  lives = 7
+  message = "Guess word"
+  messageColor = "#49ade9"
+  disabledLetters = document.querySelectorAll(".letter.disabled")
+  for letter in disabledLetters
+    letter.classList.remove("disabled")
+  drawHiddenWord()
 
 window.onload = ->
   drawAlphabet()
   draw()
+  drawHiddenWord()

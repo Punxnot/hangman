@@ -24,10 +24,18 @@ ul, ol{
 }
 .play-button{
   position: absolute;
-  top: 0;
-  right: 50%;
-  padding: 20px;
-  outline: 2px dotted red;
+  box-sizing: border-box;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px;
+  border: 1px solid #49ade9;
+  cursor: pointer;
+  font-size: 20px;
+  &:hover{
+    background-color: #49ade9;
+    color: white;
+  }
 }
 
 canvas{

@@ -1,5 +1,5 @@
 (function() {
-  var alpha, canvas, clearCanvas, clicked, count, ctx, draw, drawAlphabet, drawHiddenWord, drawLetters, drawLives, drawMessage, fillColor, guessed, lineStart, lives, livesContainer, message, messageColor, messageContainer, myWord, step, textColor, wordList,
+  var alpha, canvas, clearCanvas, clicked, count, ctx, draw, drawAlphabet, drawHiddenWord, drawLetters, drawLives, drawMessage, fillColor, guessed, initialState, lineStart, lives, livesContainer, message, messageColor, messageContainer, myWord, step, textColor, wordList,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   canvas = document.getElementById('gameCanvas');
@@ -8,7 +8,7 @@
 
   ctx.font = "30px Arial";
 
-  wordList = ["apple", "pear", "pineapple", "orange", "apricot", "peach", "raspberry", "strawberry"];
+  wordList = ["apple", "pear", "pineapple", "go"];
 
   alpha = "abcdefghijklmnopqrstuvwxyz";
 
@@ -52,14 +52,14 @@
   };
 
   drawHiddenWord = function() {
-    var i, j, ref, results;
-    results = [];
+    var i, j, ref;
+    ctx.beginPath();
     for (i = j = 1, ref = myWord.length; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
       ctx.moveTo(lineStart * i, 100);
       ctx.lineTo(lineStart * i + 20, 100);
-      results.push(ctx.stroke());
+      ctx.stroke();
     }
-    return results;
+    return ctx.closePath();
   };
 
   drawLetters = function() {
@@ -90,14 +90,12 @@
 
   draw = function() {
     console.log("Draw");
-    drawHiddenWord();
     drawLetters();
     drawMessage();
     return drawLives();
   };
 
   clearCanvas = function() {
-    console.log("Clear");
     return ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
@@ -109,6 +107,7 @@
 
   document.addEventListener("click", function(e) {
     var clickedLetter, dummy_r, j, ref;
+    console.log(e.target);
     if (e.target.classList.contains("letter") && message !== "You win" && message !== "You lose") {
       clickedLetter = e.target.id;
       if (!(indexOf.call(clicked, clickedLetter) >= 0) && !(indexOf.call(myWord, clickedLetter) >= 0)) {
@@ -129,14 +128,32 @@
       clicked.push(clickedLetter);
       e.target.classList.add("disabled");
       return draw();
-    } else if (e.target.id = "playAgain") {
-      return clearCanvas();
+    } else if (e.target.classList.contains("play-button")) {
+      return initialState();
     }
   }, false);
 
+  initialState = function() {
+    var disabledLetters, j, len, letter;
+    clearCanvas();
+    myWord = wordList[Math.floor(Math.random() * wordList.length)];
+    guessed = [];
+    clicked = [];
+    lives = 7;
+    message = "Guess word";
+    messageColor = "#49ade9";
+    disabledLetters = document.querySelectorAll(".letter.disabled");
+    for (j = 0, len = disabledLetters.length; j < len; j++) {
+      letter = disabledLetters[j];
+      letter.classList.remove("disabled");
+    }
+    return drawHiddenWord();
+  };
+
   window.onload = function() {
     drawAlphabet();
-    return draw();
+    draw();
+    return drawHiddenWord();
   };
 
 }).call(this);
