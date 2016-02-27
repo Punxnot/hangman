@@ -1,5 +1,5 @@
 (function() {
-  var alpha, canvas, clearCanvas, clicked, count, ctx, draw, drawAlphabet, drawHiddenWord, drawLetters, drawLives, drawMessage, fillColor, guessed, initialState, lineStart, lives, livesContainer, message, messageColor, messageContainer, myWord, step, textColor, wordList,
+  var alpha, canvas, clearCanvas, clicked, count, ctx, draw, drawAlphabet, drawHangman, drawHiddenWord, drawLetters, drawLives, drawMessage, fillColor, guessed, initialState, lineStart, lives, livesContainer, message, messageColor, messageContainer, myWord, step, textColor, wordList,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   canvas = document.getElementById('gameCanvas');
@@ -35,6 +35,45 @@
   messageContainer = document.getElementById("message");
 
   livesContainer = document.getElementById("lives");
+
+  drawHangman = function(counter) {
+    if (counter === 6) {
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.arc(500, 50, 30, 0, Math.PI * 2, true);
+      return ctx.stroke();
+    } else if (counter === 5) {
+      ctx.beginPath();
+      ctx.moveTo(500, 80);
+      ctx.lineTo(500, 180);
+      ctx.strokeStyle = "black";
+      return ctx.stroke();
+    } else if (counter === 4) {
+      ctx.beginPath();
+      ctx.strokeStyle = "#0000";
+      ctx.moveTo(500, 80);
+      ctx.lineTo(450, 130);
+      return ctx.stroke();
+    } else if (counter === 3) {
+      ctx.beginPath();
+      ctx.strokeStyle = "#0000";
+      ctx.moveTo(500, 80);
+      ctx.lineTo(550, 130);
+      return ctx.stroke();
+    } else if (counter === 2) {
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(500, 180);
+      ctx.lineTo(450, 280);
+      return ctx.stroke();
+    } else if (counter === 1) {
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(500, 180);
+      ctx.lineTo(550, 280);
+      return ctx.stroke();
+    }
+  };
 
   drawAlphabet = function() {
     var j, len, letter, letterContainer, results, span;
@@ -89,7 +128,6 @@
   };
 
   draw = function() {
-    console.log("Draw");
     drawLetters();
     drawMessage();
     return drawLives();
@@ -107,11 +145,11 @@
 
   document.addEventListener("click", function(e) {
     var clickedLetter, dummy_r, j, ref;
-    console.log(e.target);
     if (e.target.classList.contains("letter") && message !== "You win" && message !== "You lose") {
       clickedLetter = e.target.id;
       if (!(indexOf.call(clicked, clickedLetter) >= 0) && !(indexOf.call(myWord, clickedLetter) >= 0)) {
         lives -= 1;
+        drawHangman(lives);
         if (lives === 0) {
           messageColor = "#dc4949";
           message = "You lose";

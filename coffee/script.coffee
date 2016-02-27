@@ -16,6 +16,43 @@ messageColor = "#49ade9"
 messageContainer = document.getElementById("message")
 livesContainer = document.getElementById("lives")
 
+drawHangman = (counter) ->
+  if counter == 6
+    ctx.beginPath()
+    ctx.fillStyle = "black"
+    ctx.arc(500, 50, 30, 0, Math.PI * 2, true)
+    ctx.stroke()
+  else if counter == 5
+    ctx.beginPath()
+    ctx.moveTo(500, 80)
+    ctx.lineTo(500, 180)
+    ctx.strokeStyle = "black"
+    ctx.stroke()
+  else if counter == 4
+    ctx.beginPath()
+    ctx.strokeStyle = "#0000"
+    ctx.moveTo(500, 80)
+    ctx.lineTo(450, 130)
+    ctx.stroke()
+  else if counter == 3
+    ctx.beginPath()
+    ctx.strokeStyle = "#0000"
+    ctx.moveTo(500, 80)
+    ctx.lineTo(550, 130)
+    ctx.stroke()
+  else if counter == 2
+    ctx.beginPath()
+    ctx.strokeStyle = "black"
+    ctx.moveTo(500, 180)
+    ctx.lineTo(450, 280)
+    ctx.stroke()
+  else if counter == 1
+    ctx.beginPath()
+    ctx.strokeStyle = "black"
+    ctx.moveTo(500, 180)
+    ctx.lineTo(550, 280)
+    ctx.stroke()
+
 # Create alphabet
 drawAlphabet = ->
   letterContainer = document.getElementById("lettersContainer")
@@ -51,7 +88,6 @@ drawLives = ->
   livesContainer.style.color = messageColor
 
 draw = ->
-  console.log "Draw"
   drawLetters()
   drawMessage()
   drawLives()
@@ -66,11 +102,11 @@ count = (string, char) ->
 
 # Listen to click
 document.addEventListener("click", (e)->
-  console.log e.target
   if e.target.classList.contains("letter") and message != "You win" and message != "You lose"
     clickedLetter = e.target.id
     if !(clickedLetter in clicked) and !(clickedLetter in myWord)
       lives -= 1
+      drawHangman(lives)
       if lives == 0
         messageColor = "#dc4949"
         message = "You lose"
