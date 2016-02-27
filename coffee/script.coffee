@@ -71,6 +71,10 @@ drawLives = ->
   ctx.fillText(lives,460,30)
   ctx.closePath()
 
+drawImage = ->
+  img = document.getElementById("orange");
+  ctx.drawImage(img,500,10)
+
 draw = ->
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   drawHiddenWord()
@@ -78,6 +82,7 @@ draw = ->
   drawLetters()
   drawMessage()
   drawLives()
+  drawImage()
 
 # Helper method to count letter occurrences in string
 count = (string, char) ->
@@ -122,4 +127,5 @@ document.addEventListener("click", (e)->
   draw()
 , false)
 
-draw()
+window.onload = ->
+  draw()

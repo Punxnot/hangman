@@ -1,5 +1,5 @@
 (function() {
-  var alpha, ballRadius, canvas, canvasBottomEdge, canvasLeftEdge, canvasRightEdge, canvasTopEdge, clicked, count, ctx, draw, drawAlphabet, drawHiddenWord, drawLetters, drawLives, drawMessage, fillColor, guessed, lettersInLine, lineHeight, lineStart, lives, message, messageColor, myWord, rect, startX, startY, step, textColor, wordList,
+  var alpha, ballRadius, canvas, canvasBottomEdge, canvasLeftEdge, canvasRightEdge, canvasTopEdge, clicked, count, ctx, draw, drawAlphabet, drawHiddenWord, drawImage, drawLetters, drawLives, drawMessage, fillColor, guessed, lettersInLine, lineHeight, lineStart, lives, message, messageColor, myWord, rect, startX, startY, step, textColor, wordList,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   canvas = document.getElementById('gameCanvas');
@@ -124,13 +124,20 @@
     return ctx.closePath();
   };
 
+  drawImage = function() {
+    var img;
+    img = document.getElementById("orange");
+    return ctx.drawImage(img, 500, 10);
+  };
+
   draw = function() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawHiddenWord();
     drawAlphabet();
     drawLetters();
     drawMessage();
-    return drawLives();
+    drawLives();
+    return drawImage();
   };
 
   count = function(string, char) {
@@ -206,6 +213,8 @@
     return draw();
   }, false);
 
-  draw();
+  window.onload = function() {
+    return draw();
+  };
 
 }).call(this);
