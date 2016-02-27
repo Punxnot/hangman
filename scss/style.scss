@@ -1,60 +1,58 @@
-@font-face {
-  font-family: 'Roboto';
-  font-weight: 400;
-  src: url(../fonts/Roboto-Regular.ttf);
-}
-
-@font-face {
-  font-family: 'Roboto';
-  font-weight: 700;
-  src: url(../fonts/Roboto-Bold.ttf);
-}
-
-@mixin flexbox() {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-}
-
-@mixin inline-flexbox() {
-  display: -webkit-inline-box;
-  display: -moz-inline-box;
-  display: -ms-inline-flexbox;
-  display: -webkit-inline-flex;
-  display: inline-flex;
-}
-
-@mixin flex($values) {
-  -webkit-box-flex: $values;
-  -moz-box-flex:  $values;
-  -webkit-flex:  $values;
-  -ms-flex:  $values;
-  flex:  $values;
-}
-
-@mixin justify-content($value) {
-  -webkit-justify-content: $value;
-     -moz-justify-content: $value;
-      -ms-justify-content: $value;
-          justify-content: $value;
-}
-
 body, h1, h2, h3, h4, h5, p, ul, li, form{
   margin: 0;
   padding: 0;
+  font-family: Arial, sans-serif;
 }
 ul, ol{
   list-style: none;
+}
+.clearfix::after{
+  content: '';
+  display: table;
+  clear: both;
+}
+.to-left{
+  float: left;
+}
+.to-right{
+  float: right;
+}
+.page-wrapper{
+  width: 600px;
+  margin: 0 auto;
 }
 
 canvas{
   display: block;
   margin: 0 auto;
   background-color: #eee;
-  cursor: url(../img/feather.png), none;
 }
 .canvas-image{
   display: none;
+}
+.text-container{
+  padding: 20px 0;
+  font-size: 30px;
+}
+.letters-container{
+  margin-top: 30px;
+  font-size: 0;
+}
+.letter{
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  margin: 10px;
+  vertical-align: middle;
+  text-align: center;
+  box-sizing: border-box;
+  font-size: 30px;
+  font-weight: bold;
+  border: 1px solid #eee;
+  border-radius: 50%;
+  cursor: pointer;
+  &.disabled{
+    color: grey;
+    background: #eee;
+  }
 }

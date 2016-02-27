@@ -1,29 +1,67 @@
-@font-face {
-  font-family: 'Roboto';
-  font-weight: 400;
-  src: url(../fonts/Roboto-Regular.ttf);
-}
-@font-face {
-  font-family: 'Roboto';
-  font-weight: 700;
-  src: url(../fonts/Roboto-Bold.ttf);
-}
 body, h1, h2, h3, h4, h5, p, ul, li, form {
   margin: 0;
   padding: 0;
+  font-family: Arial, sans-serif;
 }
 
 ul, ol {
   list-style: none;
 }
 
+.clearfix::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.to-left {
+  float: left;
+}
+
+.to-right {
+  float: right;
+}
+
+.page-wrapper {
+  width: 600px;
+  margin: 0 auto;
+}
+
 canvas {
   display: block;
   margin: 0 auto;
   background-color: #eee;
-  cursor: url(../img/feather.png), none;
 }
 
 .canvas-image {
   display: none;
+}
+
+.text-container {
+  padding: 20px 0;
+  font-size: 30px;
+}
+
+.letters-container {
+  margin-top: 30px;
+  font-size: 0;
+}
+
+.letter {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  margin: 10px;
+  vertical-align: middle;
+  text-align: center;
+  box-sizing: border-box;
+  font-size: 30px;
+  font-weight: bold;
+  border: 1px solid #eee;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.letter.disabled {
+  color: grey;
+  background: #eee;
 }
