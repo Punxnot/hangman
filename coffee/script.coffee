@@ -1,7 +1,7 @@
 canvas = document.getElementById('gameCanvas')
 ctx = canvas.getContext("2d")
 ctx.font = "30px Arial"
-wordList = ["sad", "surprised", "upset"]
+wordList = ["sad", "annoyed", "angry", "anxious", "bored", "curious", "delighted", "determined", "disappointed", "disapproving", "discouraged", "disgusted", "enraged", "envious", "excited", "frightened", "furious", "hopeful", "hostile", "jealous", "joyful", "offended", "proud", "puzzled", "surprised", "suspicious", "terrified", "thoughtful", "undecided", "upset", "worried"]
 alpha = "abcdefghijklmnopqrstuvwxyz"
 myWord = wordList[Math.floor(Math.random()*wordList.length)]
 guessed = []
