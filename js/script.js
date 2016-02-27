@@ -1,5 +1,5 @@
 (function() {
-  var alpha, canvas, clicked, count, ctx, draw, drawAlphabet, drawHiddenWord, drawImage, drawLetters, drawLives, drawMessage, fillColor, guessed, lineStart, lives, livesContainer, message, messageColor, messageContainer, myWord, step, textColor, wordList,
+  var alpha, canvas, clearCanvas, clicked, count, ctx, draw, drawAlphabet, drawHiddenWord, drawLetters, drawLives, drawMessage, fillColor, guessed, lineStart, lives, livesContainer, message, messageColor, messageContainer, myWord, step, textColor, wordList,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   canvas = document.getElementById('gameCanvas');
@@ -88,17 +88,17 @@
     return livesContainer.style.color = messageColor;
   };
 
-  drawImage = function() {
-    var img;
-    img = document.getElementById("orange");
-    return ctx.drawImage(img, 500, 10);
-  };
-
   draw = function() {
+    console.log("Draw");
     drawHiddenWord();
     drawLetters();
     drawMessage();
     return drawLives();
+  };
+
+  clearCanvas = function() {
+    console.log("Clear");
+    return ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
   count = function(string, char) {
@@ -128,13 +128,14 @@
       }
       clicked.push(clickedLetter);
       e.target.classList.add("disabled");
+      return draw();
+    } else if (e.target.id = "playAgain") {
+      return clearCanvas();
     }
-    return draw();
   }, false);
 
   window.onload = function() {
     drawAlphabet();
-    drawImage();
     return draw();
   };
 

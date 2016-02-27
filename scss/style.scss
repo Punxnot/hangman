@@ -18,8 +18,16 @@ ul, ol{
   float: right;
 }
 .page-wrapper{
+  position: relative;
   width: 600px;
   margin: 0 auto;
+}
+.play-button{
+  position: absolute;
+  top: 0;
+  right: 50%;
+  padding: 20px;
+  outline: 2px dotted red;
 }
 
 canvas{

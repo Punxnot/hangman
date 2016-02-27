@@ -50,16 +50,16 @@ drawLives = ->
   livesContainer.innerHTML = lives
   livesContainer.style.color = messageColor
 
-drawImage = ->
-  img = document.getElementById("orange");
-  ctx.drawImage(img,500,10)
-
 draw = ->
-  # ctx.clearRect(0, 0, canvas.width, canvas.height)
+  console.log "Draw"
   drawHiddenWord()
   drawLetters()
   drawMessage()
   drawLives()
+
+clearCanvas = ->
+  console.log "Clear"
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
 
 # Helper method to count letter occurrences in string
 count = (string, char) ->
@@ -83,10 +83,11 @@ document.addEventListener("click", (e)->
           message = "You win"
     clicked.push(clickedLetter)
     e.target.classList.add("disabled")
-  draw()
+    draw()
+  else if e.target.id = "playAgain"
+    clearCanvas()
 , false)
 
 window.onload = ->
   drawAlphabet()
-  drawImage()
   draw()
