@@ -9,7 +9,7 @@ myWord = wordList[Math.floor(Math.random()*wordList.length)]
 guessed = []
 clicked = []
 lives = 7
-message = ""
+message = "Guess word"
 lineStart = 50
 rect = canvas.getBoundingClientRect()
 canvasLeftEdge = rect.left
@@ -22,6 +22,7 @@ lettersInLine = 13
 step = 25
 textColor = "black"
 fillColor = "silver"
+messageColor = "#49ade9"
 
 drawHiddenWord = ->
   for i in [1..myWord.length]
@@ -58,11 +59,25 @@ drawLetters = ->
       ctx.fillText(myWord[i-1], step*2*(copyWord.indexOf(copyWord[i-1])+1), 85)
       copyWord = copyWord.replace(myWord[i-1], "0")
 
+drawMessage = ->
+  ctx.beginPath()
+  ctx.fillStyle = messageColor
+  ctx.fillText(message,20,30)
+  ctx.closePath()
+
+drawLives = ->
+  ctx.beginPath()
+  ctx.fillStyle = messageColor
+  ctx.fillText(lives,460,30)
+  ctx.closePath()
+
 draw = ->
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   drawHiddenWord()
   drawAlphabet()
   drawLetters()
+  drawMessage()
+  drawLives()
 
 # Helper method to count letter occurrences in string
 count = (string, char) ->
@@ -72,25 +87,37 @@ count = (string, char) ->
 # Listen to key press
 document.addEventListener("click", (e)->
   pos = [e.clientX-canvasLeftEdge, e.clientY-canvasTopEdge]
-  if lives > 0 and message != "YOU WIN!"
+  if lives > 0 and message != "You win"
     for i in [0..alpha.length]
       if i < lettersInLine
         if pos[0] in [(startX + lineHeight * i + 7 - ballRadius)..(startX + lineHeight * i + 7 + ballRadius)] and pos[1] in [(startY - 7 - ballRadius)..(startY - 7 + ballRadius)]
           console.log alpha[i]
           if !(alpha[i] in clicked) and !(alpha[i] in myWord)
             lives -= 1
+            if lives == 0
+              messageColor = "#dc4949"
+              message = "You lose"
           else if !(alpha[i] in clicked) and (alpha[i] in myWord)
             for r in [0...count(myWord, alpha[i])]
               guessed.push(alpha[i])
+              if guessed.length == myWord.length
+                messageColor = "#2ecc71"
+                message = "You win"
           clicked.push(alpha[i])
       else
         if pos[0] in [(startX + lineHeight * (i - lettersInLine) + 7 - ballRadius)..(startX + lineHeight * (i - lettersInLine) + 7 + ballRadius)] and pos[1] in [(startY + 50 - 7 - ballRadius)..(startY + 50 - 7 + ballRadius)]
           console.log alpha[i]
           if !(alpha[i] in clicked) and !(alpha[i] in myWord)
             lives -= 1
+            if lives == 0
+              messageColor = "#dc4949"
+              message = "You lose"
           else if !(alpha[i] in clicked) and (alpha[i] in myWord)
             for r in [0...count(myWord, alpha[i])]
               guessed.push(alpha[i])
+              if guessed.length == myWord.length
+                messageColor = "#2ecc71"
+                message = "You win"
           clicked.push(alpha[i])
   draw()
 , false)

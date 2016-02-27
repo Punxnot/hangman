@@ -1,5 +1,5 @@
 (function() {
-  var alpha, ballRadius, canvas, canvasBottomEdge, canvasLeftEdge, canvasRightEdge, canvasTopEdge, clicked, count, ctx, draw, drawAlphabet, drawHiddenWord, drawLetters, fillColor, guessed, lettersInLine, lineHeight, lineStart, lives, message, myWord, rect, startX, startY, step, textColor, wordList,
+  var alpha, ballRadius, canvas, canvasBottomEdge, canvasLeftEdge, canvasRightEdge, canvasTopEdge, clicked, count, ctx, draw, drawAlphabet, drawHiddenWord, drawLetters, drawLives, drawMessage, fillColor, guessed, lettersInLine, lineHeight, lineStart, lives, message, messageColor, myWord, rect, startX, startY, step, textColor, wordList,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   canvas = document.getElementById('gameCanvas');
@@ -24,7 +24,7 @@
 
   lives = 7;
 
-  message = "";
+  message = "Guess word";
 
   lineStart = 50;
 
@@ -49,6 +49,8 @@
   textColor = "black";
 
   fillColor = "silver";
+
+  messageColor = "#49ade9";
 
   drawHiddenWord = function() {
     var i, j, ref, results;
@@ -108,11 +110,27 @@
     return results;
   };
 
+  drawMessage = function() {
+    ctx.beginPath();
+    ctx.fillStyle = messageColor;
+    ctx.fillText(message, 20, 30);
+    return ctx.closePath();
+  };
+
+  drawLives = function() {
+    ctx.beginPath();
+    ctx.fillStyle = messageColor;
+    ctx.fillText(lives, 460, 30);
+    return ctx.closePath();
+  };
+
   draw = function() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawHiddenWord();
     drawAlphabet();
-    return drawLetters();
+    drawLetters();
+    drawMessage();
+    return drawLives();
   };
 
   count = function(string, char) {
@@ -124,7 +142,7 @@
   document.addEventListener("click", function(e) {
     var i, j, k, l, m, n, o, p, pos, r, ref, ref1, ref10, ref11, ref12, ref13, ref14, ref15, ref16, ref17, ref18, ref19, ref2, ref20, ref21, ref22, ref3, ref4, ref5, ref6, ref7, ref8, ref9, results, results1, results2, results3;
     pos = [e.clientX - canvasLeftEdge, e.clientY - canvasTopEdge];
-    if (lives > 0 && message !== "YOU WIN!") {
+    if (lives > 0 && message !== "You win") {
       for (i = j = 0, ref = alpha.length; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
         if (i < lettersInLine) {
           if ((ref1 = pos[0], indexOf.call((function() {
@@ -139,9 +157,17 @@
             console.log(alpha[i]);
             if (!(ref7 = alpha[i], indexOf.call(clicked, ref7) >= 0) && !(ref8 = alpha[i], indexOf.call(myWord, ref8) >= 0)) {
               lives -= 1;
+              if (lives === 0) {
+                messageColor = "#dc4949";
+                message = "You lose";
+              }
             } else if (!(ref9 = alpha[i], indexOf.call(clicked, ref9) >= 0) && (ref10 = alpha[i], indexOf.call(myWord, ref10) >= 0)) {
               for (r = m = 0, ref11 = count(myWord, alpha[i]); 0 <= ref11 ? m < ref11 : m > ref11; r = 0 <= ref11 ? ++m : --m) {
                 guessed.push(alpha[i]);
+                if (guessed.length === myWord.length) {
+                  messageColor = "#2ecc71";
+                  message = "You win";
+                }
               }
             }
             clicked.push(alpha[i]);
@@ -159,9 +185,17 @@
             console.log(alpha[i]);
             if (!(ref18 = alpha[i], indexOf.call(clicked, ref18) >= 0) && !(ref19 = alpha[i], indexOf.call(myWord, ref19) >= 0)) {
               lives -= 1;
+              if (lives === 0) {
+                messageColor = "#dc4949";
+                message = "You lose";
+              }
             } else if (!(ref20 = alpha[i], indexOf.call(clicked, ref20) >= 0) && (ref21 = alpha[i], indexOf.call(myWord, ref21) >= 0)) {
               for (r = p = 0, ref22 = count(myWord, alpha[i]); 0 <= ref22 ? p < ref22 : p > ref22; r = 0 <= ref22 ? ++p : --p) {
                 guessed.push(alpha[i]);
+                if (guessed.length === myWord.length) {
+                  messageColor = "#2ecc71";
+                  message = "You win";
+                }
               }
             }
             clicked.push(alpha[i]);
