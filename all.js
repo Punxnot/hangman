@@ -1,5 +1,5 @@
 (function() {
-  var alpha, canvas, clearCanvas, clicked, correct, count, ctx, draw, drawAlphabet, drawHangman, drawHiddenWord, drawLetters, drawLives, drawMessage, fillColor, gameOver, guessed, imageContainer, initialState, lineStart, lives, livesContainer, message, messageColor, messageContainer, myWord, showImage, step, textColor, win, wordList, wrong,
+  var alpha, canvas, clearCanvas, clicked, correct, count, ctx, draw, drawAlphabet, drawHangman, drawHiddenWord, drawLetters, drawLives, drawMessage, fillColor, gameOver, guessed, imageContainer, initialState, lineStart, lives, livesContainer, message, messageColor, messageContainer, myWord, processLetter, showImage, step, textColor, win, wordList, wrong,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   canvas = document.getElementById('gameCanvas');
@@ -206,39 +206,56 @@
     return string.match(re).length;
   };
 
-  document.addEventListener("click", function(e) {
-    var clickedLetter, dummy_r, j, ref;
-    if (e.target.classList.contains("letter") && message !== "You win" && message !== "You lose") {
-      clickedLetter = e.target.id;
-      if (!(indexOf.call(clicked, clickedLetter) >= 0) && !(indexOf.call(myWord, clickedLetter) >= 0)) {
-        lives -= 1;
-        wrong.play();
-        drawHangman(lives);
-        if (lives === 0) {
-          messageColor = "#dc4949";
-          message = "You lose";
+  processLetter = function(letter) {
+    var dummy_r, j, ref;
+    if (!(indexOf.call(clicked, letter) >= 0) && !(indexOf.call(myWord, letter) >= 0)) {
+      lives -= 1;
+      wrong.play();
+      drawHangman(lives);
+      if (lives === 0) {
+        messageColor = "#dc4949";
+        message = "You lose";
+        myWordContainer.innerHTML = myWord;
+        setTimeout(function() {
+          return gameOver.play();
+        }, 500);
+      }
+    } else if (!(indexOf.call(clicked, letter) >= 0) && (indexOf.call(myWord, letter) >= 0)) {
+      for (dummy_r = j = 0, ref = count(myWord, letter); 0 <= ref ? j < ref : j > ref; dummy_r = 0 <= ref ? ++j : --j) {
+        guessed.push(letter);
+        correct.play();
+        if (guessed.length === myWord.length) {
+          messageColor = "#2ecc71";
+          message = "You win";
           myWordContainer.innerHTML = myWord;
           setTimeout(function() {
-            return gameOver.play();
+            return win.play();
           }, 500);
         }
-      } else if (!(indexOf.call(clicked, clickedLetter) >= 0) && (indexOf.call(myWord, clickedLetter) >= 0)) {
-        for (dummy_r = j = 0, ref = count(myWord, clickedLetter); 0 <= ref ? j < ref : j > ref; dummy_r = 0 <= ref ? ++j : --j) {
-          guessed.push(clickedLetter);
-          correct.play();
-          if (guessed.length === myWord.length) {
-            messageColor = "#2ecc71";
-            message = "You win";
-            myWordContainer.innerHTML = myWord;
-            setTimeout(function() {
-              return win.play();
-            }, 500);
-          }
-        }
       }
-      clicked.push(clickedLetter);
+    }
+    clicked.push(letter);
+    return draw();
+  };
+
+  document.addEventListener("keypress", function(e) {
+    var charCode, charStr, keyboardLetter;
+    e = e || window.event;
+    charCode = e.keyCode || e.which;
+    charStr = String.fromCharCode(charCode);
+    if (indexOf.call(alpha, charStr) >= 0 && message !== "You win" && message !== "You lose") {
+      processLetter(charStr);
+      keyboardLetter = document.getElementById(charStr);
+      return keyboardLetter.classList.add("disabled");
+    }
+  });
+
+  document.addEventListener("click", function(e) {
+    var clickedLetter;
+    if (e.target.classList.contains("letter") && message !== "You win" && message !== "You lose") {
+      clickedLetter = e.target.id;
       e.target.classList.add("disabled");
-      return draw();
+      return processLetter(clickedLetter);
     } else if (e.target.classList.contains("play-button")) {
       return initialState();
     }

@@ -156,35 +156,49 @@ count = (string, char) ->
   re = new RegExp(char, "gi")
   return string.match(re).length
 
+processLetter = (letter) ->
+  if !(letter in clicked) and !(letter in myWord)
+    lives -= 1
+    wrong.play()
+    drawHangman(lives)
+    if lives == 0
+      messageColor = "#dc4949"
+      message = "You lose"
+      myWordContainer.innerHTML = myWord
+      setTimeout(->
+        gameOver.play()
+      , 500)
+  else if !(letter in clicked) and (letter in myWord)
+    for dummy_r in [0...count(myWord, letter)]
+      guessed.push(letter)
+      correct.play()
+      if guessed.length == myWord.length
+        messageColor = "#2ecc71"
+        message = "You win"
+        myWordContainer.innerHTML = myWord
+        setTimeout(->
+          win.play()
+        , 500)
+  clicked.push(letter)
+
+  draw()
+
+document.addEventListener("keypress", (e) ->
+  e = e || window.event
+  charCode = e.keyCode || e.which
+  charStr = String.fromCharCode(charCode)
+  if charStr in alpha and message != "You win" and message != "You lose"
+    processLetter(charStr)
+    keyboardLetter = document.getElementById(charStr)
+    keyboardLetter.classList.add("disabled")
+)
+
 # Listen to click
 document.addEventListener("click", (e)->
   if e.target.classList.contains("letter") and message != "You win" and message != "You lose"
     clickedLetter = e.target.id
-    if !(clickedLetter in clicked) and !(clickedLetter in myWord)
-      lives -= 1
-      wrong.play()
-      drawHangman(lives)
-      if lives == 0
-        messageColor = "#dc4949"
-        message = "You lose"
-        myWordContainer.innerHTML = myWord
-        setTimeout(->
-          gameOver.play()
-        , 500)
-    else if !(clickedLetter in clicked) and (clickedLetter in myWord)
-      for dummy_r in [0...count(myWord, clickedLetter)]
-        guessed.push(clickedLetter)
-        correct.play()
-        if guessed.length == myWord.length
-          messageColor = "#2ecc71"
-          message = "You win"
-          myWordContainer.innerHTML = myWord
-          setTimeout(->
-            win.play()
-          , 500)
-    clicked.push(clickedLetter)
     e.target.classList.add("disabled")
-    draw()
+    processLetter(clickedLetter)
   else if e.target.classList.contains("play-button")
     initialState()
 , false)
