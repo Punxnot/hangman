@@ -130,8 +130,8 @@
       ctx.lineTo(705, 80);
       ctx.stroke();
       ctx.lineWidth = 1;
-      ctx.fillStyle = "#8000FF";
-      ctx.strokeStyle = "#8000FF";
+      ctx.fillStyle = "#49ade9";
+      ctx.strokeStyle = "#49ade9";
       ctx.moveTo(690, 90);
       ctx.bezierCurveTo(695, 130, 705, 130, 710, 90);
       return ctx.fill();
@@ -217,6 +217,7 @@
         if (lives === 0) {
           messageColor = "#dc4949";
           message = "You lose";
+          myWordContainer.innerHTML = myWord;
           setTimeout(function() {
             return gameOver.play();
           }, 500);
@@ -228,7 +229,10 @@
           if (guessed.length === myWord.length) {
             messageColor = "#2ecc71";
             message = "You win";
-            win.play();
+            myWordContainer.innerHTML = myWord;
+            setTimeout(function() {
+              return win.play();
+            }, 500);
           }
         }
       }
@@ -261,6 +265,7 @@
     drawMessage();
     drawLives();
     imageContainer.innerHTML = "";
+    myWordContainer.innerHTML = "";
     return showImage();
   };
 

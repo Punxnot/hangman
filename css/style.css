@@ -106,3 +106,8 @@ canvas {
 .image-container img {
   width: 100%;
 }
+
+.word-container {
+  font-size: 18px;
+  font-weight: bold;
+}
