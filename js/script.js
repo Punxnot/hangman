@@ -1,5 +1,5 @@
 (function() {
-  var alpha, canvas, clearCanvas, clicked, count, ctx, draw, drawAlphabet, drawHangman, drawHiddenWord, drawLetters, drawLives, drawMessage, fillColor, guessed, imageContainer, initialState, lineStart, lives, livesContainer, message, messageColor, messageContainer, myWord, showImage, step, textColor, wordList,
+  var alpha, canvas, clearCanvas, clicked, correct, count, ctx, draw, drawAlphabet, drawHangman, drawHiddenWord, drawLetters, drawLives, drawMessage, fillColor, gameOver, guessed, imageContainer, initialState, lineStart, lives, livesContainer, message, messageColor, messageContainer, myWord, showImage, step, textColor, win, wordList, wrong,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   canvas = document.getElementById('gameCanvas');
@@ -38,6 +38,14 @@
 
   imageContainer = document.getElementById("imgContainer");
 
+  wrong = new Audio('wrong.mp3');
+
+  correct = new Audio('correct.wav');
+
+  gameOver = new Audio('game_over.wav');
+
+  win = new Audio('win.wav');
+
   showImage = function() {
     var image, imagePath;
     imagePath = "img/" + myWord + ".jpg";
@@ -49,63 +57,84 @@
   drawHangman = function(counter) {
     if (counter === 7) {
       ctx.beginPath();
-      ctx.moveTo(595, 0);
-      ctx.lineTo(595, canvas.height);
+      ctx.moveTo(795, 0);
+      ctx.lineTo(795, canvas.height);
       ctx.lineWidth = 10;
       ctx.strokeStyle = "black";
       ctx.stroke();
-      ctx.moveTo(530, canvas.height - 5);
-      ctx.lineTo(595, canvas.height - 5);
+      ctx.moveTo(730, canvas.height - 5);
+      ctx.lineTo(795, canvas.height - 5);
       ctx.stroke();
-      ctx.moveTo(500, 5);
-      ctx.lineTo(595, 5);
+      ctx.moveTo(700, 5);
+      ctx.lineTo(795, 5);
       ctx.stroke();
-      ctx.moveTo(500, 0);
-      ctx.lineTo(500, 20);
+      ctx.moveTo(700, 0);
+      ctx.lineTo(700, 20);
       ctx.stroke();
-      ctx.moveTo(565, 0);
-      ctx.lineTo(595, 30);
+      ctx.moveTo(765, 0);
+      ctx.lineTo(795, 30);
       ctx.lineWidth = 5;
       return ctx.stroke();
     } else if (counter === 6) {
       ctx.beginPath();
       ctx.lineWidth = 1;
       ctx.fillStyle = "black";
-      ctx.arc(500, 80, 30, 0, Math.PI * 2, true);
+      ctx.arc(700, 80, 30, 0, Math.PI * 2, true);
       return ctx.stroke();
     } else if (counter === 5) {
       ctx.beginPath();
-      ctx.moveTo(500, 110);
-      ctx.lineTo(500, 180);
+      ctx.moveTo(700, 110);
+      ctx.lineTo(700, 180);
       return ctx.stroke();
     } else if (counter === 4) {
       ctx.beginPath();
-      ctx.moveTo(500, 110);
-      ctx.lineTo(450, 160);
+      ctx.moveTo(700, 110);
+      ctx.lineTo(650, 160);
       return ctx.stroke();
     } else if (counter === 3) {
       ctx.beginPath();
-      ctx.moveTo(500, 110);
-      ctx.lineTo(550, 160);
+      ctx.moveTo(700, 110);
+      ctx.lineTo(750, 160);
       return ctx.stroke();
     } else if (counter === 2) {
       ctx.beginPath();
       ctx.strokeStyle = "black";
-      ctx.moveTo(500, 180);
-      ctx.lineTo(450, 280);
+      ctx.moveTo(700, 180);
+      ctx.lineTo(650, 250);
       return ctx.stroke();
     } else if (counter === 1) {
       ctx.beginPath();
-      ctx.moveTo(500, 180);
-      ctx.lineTo(550, 280);
+      ctx.moveTo(700, 180);
+      ctx.lineTo(750, 250);
       return ctx.stroke();
     } else if (counter === 0) {
       ctx.beginPath();
       ctx.strokeStyle = "#dc4949";
       ctx.lineWidth = 4;
-      ctx.moveTo(500, 20);
-      ctx.lineTo(500, 50);
-      return ctx.stroke();
+      ctx.moveTo(700, 20);
+      ctx.lineTo(700, 50);
+      ctx.stroke();
+      ctx.lineWidth = 3;
+      ctx.fillStyle = "black";
+      ctx.strokeStyle = "black";
+      ctx.moveTo(685, 70);
+      ctx.lineTo(695, 80);
+      ctx.stroke();
+      ctx.moveTo(695, 70);
+      ctx.lineTo(685, 80);
+      ctx.stroke();
+      ctx.moveTo(705, 70);
+      ctx.lineTo(715, 80);
+      ctx.stroke();
+      ctx.moveTo(715, 70);
+      ctx.lineTo(705, 80);
+      ctx.stroke();
+      ctx.lineWidth = 1;
+      ctx.fillStyle = "#8000FF";
+      ctx.strokeStyle = "#8000FF";
+      ctx.moveTo(690, 90);
+      ctx.bezierCurveTo(695, 130, 705, 130, 710, 90);
+      return ctx.fill();
     }
   };
 
@@ -183,17 +212,23 @@
       clickedLetter = e.target.id;
       if (!(indexOf.call(clicked, clickedLetter) >= 0) && !(indexOf.call(myWord, clickedLetter) >= 0)) {
         lives -= 1;
+        wrong.play();
         drawHangman(lives);
         if (lives === 0) {
           messageColor = "#dc4949";
           message = "You lose";
+          setTimeout(function() {
+            return gameOver.play();
+          }, 500);
         }
       } else if (!(indexOf.call(clicked, clickedLetter) >= 0) && (indexOf.call(myWord, clickedLetter) >= 0)) {
         for (dummy_r = j = 0, ref = count(myWord, clickedLetter); 0 <= ref ? j < ref : j > ref; dummy_r = 0 <= ref ? ++j : --j) {
           guessed.push(clickedLetter);
+          correct.play();
           if (guessed.length === myWord.length) {
             messageColor = "#2ecc71";
             message = "You win";
+            win.play();
           }
         }
       }

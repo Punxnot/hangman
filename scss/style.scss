@@ -22,7 +22,7 @@ ul, ol{
   position: relative;
   display: inline-block;
   vertical-align: top;
-  width: 600px;
+  width: 800px;
   margin-left: 20px;
 }
 .play-button{
@@ -35,6 +35,7 @@ ul, ol{
   border: 1px solid #49ade9;
   cursor: pointer;
   font-size: 20px;
+  transition: background-color .3s;
   &:hover{
     background-color: #49ade9;
     color: white;
