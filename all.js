@@ -1,5 +1,5 @@
 (function() {
-  var alpha, canvas, clearCanvas, clicked, correct, count, ctx, draw, drawAlphabet, drawHangman, drawHiddenWord, drawLetters, drawLives, drawMessage, fillColor, gameOver, guessed, imageContainer, initialState, lineStart, lives, livesContainer, message, messageColor, messageContainer, myWord, processLetter, showImage, step, textColor, win, wordList, wrong,
+  var alpha, canvas, clearAll, clearCanvas, clicked, correct, count, ctx, draw, drawAlphabet, drawHangman, drawHiddenWord, drawLetters, drawLives, drawMessage, fillColor, gameOver, guessed, imageContainer, initialState, lineStart, lives, livesContainer, message, messageColor, messageContainer, myWord, processLetter, showImage, step, textColor, vertManStart, win, wordList, wrong,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   canvas = document.getElementById('gameCanvas');
@@ -46,6 +46,8 @@
 
   win = new Audio('win.wav');
 
+  vertManStart = 80;
+
   showImage = function() {
     var image, imagePath;
     imagePath = "img/" + myWord + ".jpg";
@@ -79,33 +81,33 @@
       ctx.beginPath();
       ctx.lineWidth = 1;
       ctx.fillStyle = "black";
-      ctx.arc(700, 80, 30, 0, Math.PI * 2, true);
+      ctx.arc(700, vertManStart, 30, 0, Math.PI * 2, true);
       return ctx.stroke();
     } else if (counter === 5) {
       ctx.beginPath();
-      ctx.moveTo(700, 110);
-      ctx.lineTo(700, 180);
+      ctx.moveTo(700, vertManStart + 30);
+      ctx.lineTo(700, vertManStart + 100);
       return ctx.stroke();
     } else if (counter === 4) {
       ctx.beginPath();
-      ctx.moveTo(700, 110);
-      ctx.lineTo(650, 160);
+      ctx.moveTo(700, vertManStart + 30);
+      ctx.lineTo(650, vertManStart + 80);
       return ctx.stroke();
     } else if (counter === 3) {
       ctx.beginPath();
-      ctx.moveTo(700, 110);
-      ctx.lineTo(750, 160);
+      ctx.moveTo(700, vertManStart + 30);
+      ctx.lineTo(750, vertManStart + 80);
       return ctx.stroke();
     } else if (counter === 2) {
       ctx.beginPath();
       ctx.strokeStyle = "black";
-      ctx.moveTo(700, 180);
-      ctx.lineTo(650, 250);
+      ctx.moveTo(700, vertManStart + 100);
+      ctx.lineTo(650, vertManStart + 170);
       return ctx.stroke();
     } else if (counter === 1) {
       ctx.beginPath();
-      ctx.moveTo(700, 180);
-      ctx.lineTo(750, 250);
+      ctx.moveTo(700, vertManStart + 100);
+      ctx.lineTo(750, vertManStart + 170);
       return ctx.stroke();
     } else if (counter === 0) {
       ctx.beginPath();
@@ -117,23 +119,23 @@
       ctx.lineWidth = 3;
       ctx.fillStyle = "black";
       ctx.strokeStyle = "black";
-      ctx.moveTo(685, 70);
-      ctx.lineTo(695, 80);
+      ctx.moveTo(685, vertManStart - 10);
+      ctx.lineTo(695, vertManStart);
       ctx.stroke();
-      ctx.moveTo(695, 70);
-      ctx.lineTo(685, 80);
+      ctx.moveTo(695, vertManStart - 10);
+      ctx.lineTo(685, vertManStart);
       ctx.stroke();
-      ctx.moveTo(705, 70);
-      ctx.lineTo(715, 80);
+      ctx.moveTo(705, vertManStart - 10);
+      ctx.lineTo(715, vertManStart);
       ctx.stroke();
-      ctx.moveTo(715, 70);
-      ctx.lineTo(705, 80);
+      ctx.moveTo(715, vertManStart - 10);
+      ctx.lineTo(705, vertManStart);
       ctx.stroke();
       ctx.lineWidth = 1;
       ctx.fillStyle = "#49ade9";
       ctx.strokeStyle = "#49ade9";
-      ctx.moveTo(690, 90);
-      ctx.bezierCurveTo(695, 130, 705, 130, 710, 90);
+      ctx.moveTo(690, vertManStart + 10);
+      ctx.bezierCurveTo(695, vertManStart + 50, 705, vertManStart + 50, 710, vertManStart + 10);
       return ctx.fill();
     }
   };
@@ -261,11 +263,12 @@
     }
   }, false);
 
-  initialState = function() {
+  clearAll = function() {
     var disabledLetters, j, len, letter;
     clearCanvas();
     ctx.strokeStyle = "black";
     ctx.lineWidth = 1;
+    vertManStart = 80;
     myWord = wordList[Math.floor(Math.random() * wordList.length)];
     guessed = [];
     clicked = [];
@@ -284,6 +287,30 @@
     imageContainer.innerHTML = "";
     myWordContainer.innerHTML = "";
     return showImage();
+  };
+
+  initialState = function() {
+    var myInterval;
+    if (message === "You lose") {
+      myInterval = setInterval(function() {
+        var j, results, stage;
+        if (vertManStart < canvas.height + vertManStart && message === "You lose") {
+          vertManStart += 10;
+          ctx.clearRect(canvas.width / 2, 0, canvas.width, canvas.height);
+          results = [];
+          for (stage = j = 0; j <= 7; stage = ++j) {
+            results.push(drawHangman(stage));
+          }
+          return results;
+        }
+      }, 30);
+      return setTimeout(function() {
+        clearInterval(myInterval);
+        return clearAll();
+      }, 1000);
+    } else {
+      return clearAll();
+    }
   };
 
   window.onload = function() {

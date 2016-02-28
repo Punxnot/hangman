@@ -20,6 +20,7 @@ wrong = new Audio('wrong.mp3')
 correct = new Audio('correct.wav')
 gameOver = new Audio('game_over.wav')
 win = new Audio('win.wav')
+vertManStart = 80
 
 showImage = ->
   imagePath = "img/#{myWord}.jpg"
@@ -52,33 +53,33 @@ drawHangman = (counter) ->
     ctx.beginPath()
     ctx.lineWidth = 1
     ctx.fillStyle = "black"
-    ctx.arc(700, 80, 30, 0, Math.PI * 2, true)
+    ctx.arc(700, vertManStart, 30, 0, Math.PI * 2, true)
     ctx.stroke()
   else if counter == 5
     ctx.beginPath()
-    ctx.moveTo(700, 110)
-    ctx.lineTo(700, 180)
+    ctx.moveTo(700, vertManStart+30)
+    ctx.lineTo(700, vertManStart+100)
     ctx.stroke()
   else if counter == 4
     ctx.beginPath()
-    ctx.moveTo(700, 110)
-    ctx.lineTo(650, 160)
+    ctx.moveTo(700, vertManStart+30)
+    ctx.lineTo(650, vertManStart+80)
     ctx.stroke()
   else if counter == 3
     ctx.beginPath()
-    ctx.moveTo(700, 110)
-    ctx.lineTo(750, 160)
+    ctx.moveTo(700, vertManStart+30)
+    ctx.lineTo(750, vertManStart+80)
     ctx.stroke()
   else if counter == 2
     ctx.beginPath()
     ctx.strokeStyle = "black"
-    ctx.moveTo(700, 180)
-    ctx.lineTo(650, 250)
+    ctx.moveTo(700, vertManStart+100)
+    ctx.lineTo(650, vertManStart+170)
     ctx.stroke()
   else if counter == 1
     ctx.beginPath()
-    ctx.moveTo(700, 180)
-    ctx.lineTo(750, 250)
+    ctx.moveTo(700, vertManStart+100)
+    ctx.lineTo(750, vertManStart+170)
     ctx.stroke()
   else if counter == 0
     ctx.beginPath()
@@ -90,23 +91,23 @@ drawHangman = (counter) ->
     ctx.lineWidth = 3
     ctx.fillStyle = "black"
     ctx.strokeStyle = "black"
-    ctx.moveTo(685, 70)
-    ctx.lineTo(695, 80)
+    ctx.moveTo(685, vertManStart-10)
+    ctx.lineTo(695, vertManStart)
     ctx.stroke()
-    ctx.moveTo(695, 70)
-    ctx.lineTo(685, 80)
+    ctx.moveTo(695, vertManStart-10)
+    ctx.lineTo(685, vertManStart)
     ctx.stroke()
-    ctx.moveTo(705, 70)
-    ctx.lineTo(715, 80)
+    ctx.moveTo(705, vertManStart-10)
+    ctx.lineTo(715, vertManStart)
     ctx.stroke()
-    ctx.moveTo(715, 70)
-    ctx.lineTo(705, 80)
+    ctx.moveTo(715, vertManStart-10)
+    ctx.lineTo(705, vertManStart)
     ctx.stroke()
     ctx.lineWidth = 1
     ctx.fillStyle = "#49ade9"
     ctx.strokeStyle = "#49ade9"
-    ctx.moveTo(690,90)
-    ctx.bezierCurveTo(695, 130, 705, 130, 710, 90)
+    ctx.moveTo(690,vertManStart+10)
+    ctx.bezierCurveTo(695, vertManStart+50, 705, vertManStart+50, 710, vertManStart+10)
     ctx.fill()
 
 # Create alphabet
@@ -203,10 +204,11 @@ document.addEventListener("click", (e)->
     initialState()
 , false)
 
-initialState = ->
+clearAll = ->
   clearCanvas()
   ctx.strokeStyle = "black"
   ctx.lineWidth = 1
+  vertManStart = 80
   myWord = wordList[Math.floor(Math.random()*wordList.length)]
   guessed = []
   clicked = []
@@ -223,6 +225,22 @@ initialState = ->
   imageContainer.innerHTML = ""
   myWordContainer.innerHTML = ""
   showImage()
+
+initialState = ->
+  if message == "You lose"
+    myInterval = setInterval(->
+      if vertManStart < canvas.height+vertManStart and message == "You lose"
+        vertManStart+=10
+        ctx.clearRect(canvas.width/2, 0, canvas.width, canvas.height)
+        for stage in [0..7]
+          drawHangman(stage)
+    , 30)
+    setTimeout(->
+      clearInterval(myInterval)
+      clearAll()
+    , 1000)
+  else
+    clearAll()
 
 window.onload = ->
   drawAlphabet()
